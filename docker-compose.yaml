@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: notejam
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - host
+  webapp:
+    build: .
+    environment:
+      DB_ENGINE: django.db.backends.postgresql_psycopg2
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - host
+
+networks:
+  host:

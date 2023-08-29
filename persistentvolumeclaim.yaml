@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: slow
+  volumeMode: Filesystem
+  selector:
+    matchLabels:
+      name: my-pv
+  accessModes:
+    - ReadWriteOnce

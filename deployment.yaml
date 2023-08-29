@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notejam
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notejam
+  template:
+    metadata:
+      labels:
+        app: notejam
+    spec:
+      containers:
+        - name: app
+          image: janit31/notejam-webapp:v2
+          ports:
+            - containerPort: 8000
+          imagePullPolicy: Always
+          env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: password
+          - name: POSTGRES_HOST
+            value: postgres-service
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: notejam
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8000
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    app: notejam
+  type: LoadBalancer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: notejam
+  annotations:
+    ingressClassName: nginx
+spec:
+  rules:
+    - host: notesapp.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: notejam
+                port:
+                  number: 80
