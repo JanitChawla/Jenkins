@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
+  name: postgres-jenkins
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: postgres-jenkins
   template:
     metadata:
       labels:
-        app: postgres
+        app: postgres-jenkins
     spec:
       containers:
-      - name: postgres
+      - name: postgres-jenkins
         image: postgres
         resources: {}
         ports:
@@ -32,4 +32,4 @@ spec:
       volumes:
       - name: postgres-volume-mount
         persistentVolumeClaim:
-          claimName: postgres-pvc
+          claimName: postgres-pvc-jenkins
