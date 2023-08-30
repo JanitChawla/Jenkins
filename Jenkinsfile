@@ -23,20 +23,28 @@ pipeline{
         }
         stage('Pushing Image'){
             steps{
-                script{
-                    docker.withRegistry('https://hub.docker.com/', DOCKERHUB_CREDENTIALS){
-                        dockerImage.push("latest")
-                    }
-                }
+                sh 'docker push janit31/my-notejam'
             }
         }
-        stage('Deploying'){
+        stage('Databse'){
             steps{
-                scripts{
-                    kubernetesDeploy(configs: 'deployment.yaml','persistentvolume.yaml','persistentvolumeclaim','postgres-deploy.yaml','postgres-secret.yaml','postgres-service.yaml')
-                }
+                sh 'kubectl apply -f postgres-secret.yaml'
+                sh 'kubectl apply -f postgres-deploy.yaml'
+                sh 'kubectl apply -f postgres-service.yaml'
+            }
+        }
+        stage("Notejam"){
+            steps{
+                sh 'kubectl apply -f persistentvolume.yaml'
+                sh 'kubectl apply -f persistentvolumeclaim.yaml'
+                sh 'kubectl apply -f deployment.yaml'
             }
         }
 
     }
+    post {
+    always {
+      sh 'docker logout'
+    }
+  }
 }
