@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: janit31/my-notejam:latest
+          image: janit31/my-notejam
           ports:
             - containerPort: 8000
           imagePullPolicy: Always
