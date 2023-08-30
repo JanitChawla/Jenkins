@@ -2,7 +2,7 @@ pipeline{
     environment{
         dockerimagename = "janit31/my-notejam"
         dockerImage =""
-        registrycredentials = 'dockerhub'
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
     }
     agent any
     stages {
@@ -24,7 +24,7 @@ pipeline{
         stage('Pushing Image'){
             steps{
                 script{
-                    docker.withRegistry('https://hub.docker.com/', registrycredentials){
+                    docker.withRegistry('https://hub.docker.com/', DOCKERHUB_CREDENTIALS){
                         dockerImage.push("latest")
                     }
                 }
