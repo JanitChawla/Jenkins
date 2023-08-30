@@ -68,9 +68,7 @@ pipeline{
         }
         stage('Build Image'){
             steps {
-                script{
-                    dockerImage = docker.build dockerimagename
-                }
+                sh 'docker build -t janit31/my-notejam --no-cache .'
             }
         }
         stage('Pushing Image'){
