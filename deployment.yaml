@@ -13,7 +13,7 @@ spec:
         app: notejam-jenkins
     spec:
       containers:
-        - name: app
+        - name: app-jenkins
           image: janit31/my-notejam
           ports:
             - containerPort: 8000
