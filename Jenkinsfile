@@ -63,7 +63,7 @@ pipeline{
     stages {
         stage('Checkout Source'){
             steps{
-                git 'https://github.com/janit-chawla/notejam.git'
+                git credentialsId: 'github', url: 'https://github.com/janit-chawla/notejam.git'
             }
         }
         stage('Build Image'){
