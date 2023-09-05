@@ -1,9 +1,15 @@
 pipeline{
     environment{
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+        KUBECONFIG = credentials('cd_config')
     }
     agent any
     stages {
+                stage("Clean-up") {
+            steps {
+                deleteDir()
+            }
+        }
         stage('Checkout Source'){
             steps{
                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/janit-chawla/notejam.git'
@@ -20,18 +26,6 @@ pipeline{
             }
         }
         
-        stage('remove kubeconfig if exists') {
-           steps {
-             sh "rm -rf ${WORKSPACE}/cd_config.yaml"
-           }
-     }
-        stage('setup kubeconfig') {
-          steps {
-            withCredentials([file(credentialsId: 'cd_config', variable: 'cd_config')]) {
-                sh "cp \${cd_config} ${WORKSPACE}/cd_config"
-            }
-          }
-    }
         stage('Pushing Image'){
             steps{
                 sh 'docker push janit31/my-notejam'
@@ -39,18 +33,24 @@ pipeline{
         }
         stage('Databse'){
             steps{
-                sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config config set-context --current --user=cd-sa'
-                sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config apply -f postgres-secret.yaml'
-                sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config apply -f postgres-deploy.yaml'
-                sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config apply -f postgres-service.yaml'
+                // sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config config set-context --current --user=cd-sa'
+                // sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config apply -f postgres-secret.yaml'
+                // sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config apply -f postgres-deploy.yaml'
+                // sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config apply -f postgres-service.yaml'
+                sh 'kubectl --kubeconfig $KUBECONFIG apply -f /var/jenkins_home/workspace/notejam_main/postgres-secret.yaml'
+                sh 'kubectl --kubeconfig $KUBECONFIG apply -f /var/jenkins_home/workspace/notejam_main/postgres-deploy.yaml'
+                sh 'kubectl --kubeconfig $KUBECONFIG apply -f /var/jenkins_home/workspace/notejam_main/postgres-service.yaml'
+                sh 'kubectl --kubeconfig $KUBECONFIG apply -f /var/jenkins_home/workspace/notejam_main/persistentvolume.yaml'
+                sh 'kubectl --kubeconfig $KUBECONFIG apply -f /var/jenkins_home/workspace/notejam_main/persistentvolumeclaim.yaml'
             }
         }
         stage("Notejam"){
             steps{
-                sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config config set-context --current --user=cd-sa'
-                sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config apply -f persistentvolume.yaml'
-                sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config apply -f persistentvolumeclaim.yaml'
-                sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config apply -f deployment.yaml'
+                // sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config config set-context --current --user=cd-sa'
+                // sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config apply -f persistentvolume.yaml'
+                // sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config apply -f persistentvolumeclaim.yaml'
+                // sh 'kubectl --kubeconfig ${WORKSPACE}/cd_config apply -f deployment.yaml'
+                sh 'kubectl --kubeconfig $KUBECONFIG apply -f /var/jenkins_home/workspace/notejam_main/deployment.yaml'
             }
         }
 
