@@ -20,18 +20,18 @@ pipeline{
             }
         }
         
-        stage('remove kubeconfig if exists') {
-           steps {
-             sh "rm -rf ${WORKSPACE}/cd_config.yaml"
-           }
-     }
-        stage('setup kubeconfig') {
-          steps {
-            withCredentials([file(credentialsId: 'cd_config', variable: 'cd_config')]) {
-                sh "cp \${cd_config} ${WORKSPACE}/cd_config"
-            }
-          }
-    }
+    //     stage('remove kubeconfig if exists') {
+    //        steps {
+    //          sh "rm -rf ${WORKSPACE}/cd_config.yaml"
+    //        }
+    //  }
+    //     stage('setup kubeconfig') {
+    //       steps {
+    //         withCredentials([file(credentialsId: 'cd_config', variable: 'cd_config')]) {
+    //             sh "cp \${cd_config} ${WORKSPACE}/cd_config"
+    //         }
+    //       }
+    // }
         stage('Pushing Image'){
             steps{
                 sh 'docker push janit31/my-notejam'
