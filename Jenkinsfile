@@ -1,7 +1,7 @@
 pipeline{
     environment{
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-        KUBECONFIG = credentials('cd_config')
+        KUBECONFIG = credentials('jenkins_config')
     }
     agent any
     stages {
