@@ -33,17 +33,17 @@ pipeline{
         }
         stage('setup kubeconfig') {
           steps {
-            withCredentials([file(credentialsId: 'jenkins_config', variable: 'jenkins_config')]) {
-                sh "cp \${jenkins_config} ${WORKSPACE}/jenkins_config"
+            withCredentials([file(credentialsId: 'jenkins_config1', variable: 'jenkins_config1')]) {
+                sh "cp \${jenkins_config1} ${WORKSPACE}/jenkins_config1"
             }
           }
     }
         stage('Databse'){
             steps{
-                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config config set-context --current --user=jenkins-admin'
-                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config apply -f postgres-secret.yaml'
-                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config apply -f postgres-deploy.yaml'
-                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config apply -f postgres-service.yaml'
+                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 config set-context --current --user=jenkins-admin'
+                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 apply -f postgres-secret.yaml'
+                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 apply -f postgres-deploy.yaml'
+                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 apply -f postgres-service.yaml'
                 // sh 'kubectl --kubeconfig $KUBECONFIG apply -f /var/jenkins_home/workspace/notejam_main/postgres-secret.yaml'
                 // sh 'kubectl --kubeconfig $KUBECONFIG apply -f /var/jenkins_home/workspace/notejam_main/postgres-deploy.yaml'
                 // sh 'kubectl --kubeconfig $KUBECONFIG apply -f /var/jenkins_home/workspace/notejam_main/postgres-service.yaml'
@@ -53,10 +53,10 @@ pipeline{
         }
         stage("Notejam"){
             steps{
-                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config config set-context --current --user=jenkins-admin'
-                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config apply -f persistentvolume.yaml'
-                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config apply -f persistentvolumeclaim.yaml'
-                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config apply -f deployment.yaml'
+                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 config set-context --current --user=jenkins-admin'
+                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 apply -f persistentvolume.yaml'
+                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 apply -f persistentvolumeclaim.yaml'
+                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 apply -f deployment.yaml'
                 // sh 'kubectl --kubeconfig $KUBECONFIG apply -f /var/jenkins_home/workspace/notejam_main/deployment.yaml'
             }
         }
