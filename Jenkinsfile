@@ -3,11 +3,7 @@ pipeline{
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
         KUBECONFIG = credentials('jenkins_config')
     }
-    agent {
-        kubernetes {
-            yamlFile 'postgres-secret.yaml'
-        }
-    }
+    agent any
     stages {
                 stage("Clean-up") {
             steps {
