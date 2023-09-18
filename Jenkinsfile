@@ -40,7 +40,7 @@ pipeline{
     }
         stage('Databse'){
             steps{
-                // sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 config set-context --current --user=jenkins-admin'
+                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 config set-context --current --user=jenkins-admin'
                 sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 apply -f postgres-secret.yaml'
                 sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 apply -f postgres-deploy.yaml'
                 sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 apply -f postgres-service.yaml'
@@ -53,7 +53,7 @@ pipeline{
         }
         stage("Notejam"){
             steps{
-                // sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 config set-context --current --user=jenkins-admin'
+                sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 config set-context --current --user=jenkins-admin'
                 sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 apply -f persistentvolume.yaml'
                 sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 apply -f persistentvolumeclaim.yaml'
                 sh 'kubectl --kubeconfig ${WORKSPACE}/jenkins_config1 apply -f deployment.yaml'
