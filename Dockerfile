@@ -2,7 +2,7 @@
 FROM python:2.7
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-LABEL version="1.1"
+LABEL version="1.2"
 ENV DockerHOME=/home/app/webapp
 ENV DB_ENGINE=django.db.backends.postgresql_psycopg2  
 RUN mkdir -p $DockerHOME  
