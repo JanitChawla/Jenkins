@@ -22,10 +22,10 @@ spec:
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: postgres-secret
+                name: postgres-secret-jenkins
                 key: password
           - name: POSTGRES_HOST
-            value: postgres-service
+            value: postgres-service-jenkins
 
 ---
 
